@@ -3,6 +3,7 @@ from django.core.files.storage import FileSystemStorage
 from .util import classify_image
 import platform
 import os
+import base64
 
 cwd = os.getcwd()
 osType = platform.system()
@@ -26,5 +27,9 @@ def upload(request):
         # print(res)
         type = res['label']
         prob = res['probablity']
-        return render(request, 'result.html', {'url': url, 'type': type, 'prob': prob})
+        imgopn = open(str(cwd)+url,'rb')
+        base64img= base64.b64encode(imgopn.read())
+        imgopn.close()
+        os.remove(str(cwd)+url)
+        return render(request, 'result.html', {'url': url, 'type': type, 'prob': prob,'img':base64img.decode('utf-8')})
     return render(request, 'upload.html')
