@@ -1,0 +1,4 @@
+streamlit==1.7.0
+Pillow==9.0.1
+tensorflow-cpu==2.7.0
+plotly==5.6.0
