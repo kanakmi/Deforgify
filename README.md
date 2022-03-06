@@ -66,6 +66,10 @@ The "fake" faces collected in this dataset are generated using the StyleGAN2, wh
 - **Deploying** the project on GitHub helped us to get the project deployed on the network to be accessed by other people.
 - We are using GitHub for **Collaboration**. GitHub makes it easy to share code with others and helps a lot in collaboration. GitHub makes it easy to set up a project and get started.
 
+## 🛠 Best Usage of CI/CD sponsored by CircleCI
+
+We are using CircleCI for continuous integration and deployment. CircleCI is a free service that provides continuous integration and deployment for your applications. It’s a great way to test our code, run our tests, and deploy our code.
+
 ## 🌐 Best Domain Name from GoDaddy Registry [APAC Only]
 
 - Any Domain Name with .co, .us, .buzz.
