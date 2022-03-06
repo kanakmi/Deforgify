@@ -49,6 +49,26 @@ The "fake" faces collected in this dataset are generated using the StyleGAN2, wh
 - The model with least Validation Loss was saved during the training and reloaded before obtaining the final results.
 - The model was able to classify all of the samples correctly.
 
+## ⚙️ How we built it
+
+- Django: For backend
+- Python: For backend
+- HTML and CSS: For frontend
+- GitHub pages: For CI/CD and deployment
+- Linode: For host our server
+
+## ☁️ Use of Linode
+
+We have a dedicated Linode server for our backend. We use it for hosting our website and for storing our data. Linode Block Storage allows users to extend their server storage capacity with volumes on demand. Linode Backup allows us to back up their servers on a daily, weekly, or monthly basis which makes it easy and efficient. Linode allows users to manage multiple server instances across a single system.
+
+## 🤝 Most Creative Use of GitHub
+
+We are using GitHub for Collaboration. GitHub makes it easy to share code with others and helps a lot in collaboration. GitHub makes it easy to set up a project and get started. GitHub makes it easy to implement the CI/CD workflow and makes the deployment process easy. Deploying the project on GitHub helped us to get the project deployed on the network to be accessed by other people.
+
+## 🌐 Best Domain Name from GoDaddy Registry [APAC Only]
+
+- Any Domain Name with .co, .us, .buzz.
+
 ## 🧠 Challenges we ran into
 After achieving 96% accuracy on the testing data initially, we were releaved thinking we have built something great that can correctly classify most of the fake images online. We decided to put it to the test by downloading more test images from Google, but the results were utterly unexpected. Six of the ten photos we evaluated were incorrectly categorised. We were so disappointed with the outcome that we decided to start over with a fresh dataset and a little different strategy, and it worked like magic.
 
