@@ -20,7 +20,7 @@ def app():
     Deforgify is a tool that utilizes the power of Deep Learning to distinguish Real images from the Fake ones. For instance, if someone takes your original image and inserts your face into a murder scene or photoshops it onto someone else's body, Deforgify will tag it as fake reducing the chances of it being used to smear you. <br>
     Simply submit the image, and the machine learning model will evaluate it and provide a response in a fraction of a second.'''
 
-    st.write(what_it_does)
+    st.markdown(what_it_does, unsafe_allow_html=True)
 
     stats, buff, graph = st.columns([2, 0.5, 2])
 
@@ -56,7 +56,7 @@ def app():
 - We started with 512 neurons in the first Dense layer and reduced them to half over the next two Dense layers.
 - Some Dropout Layers were also introduced throught the model to randomly ignore some of the neurons and reduce over-fitting.
 - We used ReLU activation in all layers except output layer to reduce computation cost and introduce non-linearity.
-- Finally the Output Layer was constructed containing 3 neurons (1 for each class) and softmax activation.
+- Finally the Output Layer was constructed containing 2 neurons (1 for each class) and softmax activation.
 '''
     st.write(ml_process)
 
