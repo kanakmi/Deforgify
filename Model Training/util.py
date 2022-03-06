@@ -3,7 +3,7 @@ from PIL import Image
 import numpy as np
 
 model = None
-labels = ['fake', 'real']
+labels = ['real', 'fake']
 
 def load_model():
     global model
@@ -17,13 +17,12 @@ def classify_image(file_path):
     image = image.resize((128, 128)) # resizing the image to fit the trained model
     img = np.asarray(image) # converting it to numpy array
     img = np.expand_dims(img, 0)
-    predictions = model.predict(img) # predicting the class
-    c = np.argmax(predictions[0]) # extracting the class with maximum probablity
-    cls = labels[c]
-    probab = float(round(predictions[0][c]*100, 2))
+    predictions = model.predict(img) # predicting the label
+    label = labels[np.argmax(predictions[0])] # extracting the label with maximum probablity
+    probab = float(round(predictions[0][np.argmax(predictions[0])]*100, 2))
 
     result = {
-        'class': cls,
+        'label': label,
         'probablity': probab
     }
 
