@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Results | Deforgify</title>
+    <title>Upload Image | Deforgify</title>
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -238,7 +238,6 @@
             width: 100vw;
             display: grid;
             place-items: center;
-            padding-top: 50px;
         }
 
         .container {
@@ -346,6 +345,139 @@
             display: grid;
             place-items: center;
         }
+
+        .modal-container {
+            margin: 0 auto;
+            padding-top: 60px;
+            position: relative;
+            width: 160px;
+        }
+
+        .modal-container button {
+            display: block;
+            margin: 0 auto;
+            color: #fff;
+            width: 160px;
+            height: 50px;
+            line-height: 50px;
+            background: #446CB3;
+            font-size: 22px;
+            border: 0;
+            border-radius: 3px;
+            box-shadow: 0 5px 5px -5px #333;
+            transition: background 0.3s ease-in;
+        }
+
+        .modal-container .modal-backdrop {
+            height: 0;
+            width: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: opacity 0.2s ease-in;
+        }
+
+        .modal-container #modal-toggle {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .modal-container #modal-toggle {
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 9;
+            opacity: 0;
+        }
+
+        .modal-container #modal-toggle~.modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.6);
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 9;
+            pointer-events: none;
+            opacity: 1;
+        }
+
+        .modal-container #modal-toggle~.modal-backdrop .modal-content {
+            background-color: #fff;
+            max-width: 400px;
+            width: 100%;
+            height: 280px;
+            padding: 10px 30px;
+            position: absolute;
+            left: calc(50% - 200px);
+            top: 12%;
+            border-radius: 4px;
+            z-index: 999;
+            pointer-events: auto;
+            cursor: auto;
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.6);
+        }
+
+        @media (max-width: 400px) {
+
+            .modal-container #modal-toggle~.modal-backdrop .modal-content {
+                left: 0;
+            }
+        }
+
+        .modal-container #modal-toggle:checked~.modal-backdrop .modal-content .modal-close {
+            color: #666;
+            position: absolute;
+            right: 2px;
+            top: 0;
+            padding-top: 7px;
+            background: #fff;
+            font-size: 16px;
+            width: 25px;
+            height: 28px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .modal-container #modal-toggle:checked~.modal-backdrop .modal-content .modal-close.button {
+            top: initial;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: #fff;
+            width: 50px;
+            border-radius: 2px;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .modal-container #modal-toggle:checked~.modal-backdrop .modal-content .modal-close.button:hover {
+            color: #fff;
+            background: #1E824C;
+        }
+
+        .modal-container #modal-toggle:checked~.modal-backdrop .modal-content .modal-close:hover {
+            color: #333;
+        }
+        .loading{
+            height: 100vh;
+            top:0;
+            width: 100vw;
+            background-color: rgba(255, 255, 255, 0.534);
+            display: none;
+            position: absolute;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
     </style>
     <div class="sidebar">
         <div class="logo-details">
@@ -383,21 +515,40 @@
         </ul>
     </div>
     <section>
-        <div>
-            <h1 class="heading1">Original Image:</h1>
-            <div class="image" data-aos="fade-up">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUIjt1729YRBsVKe30AwJ2rHv4nWJBrUxxsQ&usqp=CAU"
-                    alt="">
-            </div>
-        </div>
+        <form action="" method="post" id="fileform" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container">
+                <div class="wrapper">
+                    <div class="image">
+                        <img src="" alt="">
+                    </div>
+                    <div class="content">
+                        <div class="icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="text">
+                            No file chosen, yet!
+                        </div>
+                    </div>
+                    <div id="cancel-btn">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <div class="file-name">
+                        File name here
+                    </div>
+                </div>
+                <div onclick="defaultBtnActive()" id="custom-btn"
+                    style="display: flex; align-items: center; justify-content: center;">Choose a file</div>
+                <input id="default-btn" type="file" hidden name="myfile">
 
-        <div>
-            <h1 class="heading1">Result:</h1>
-            <p class="">Result: Real</p>
-            <div class="image" data-aos="fade-up">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUIjt1729YRBsVKe30AwJ2rHv4nWJBrUxxsQ&usqp=CAU"
-                    alt="">
+                <button type="submit"
+                    style="margin-top: 28px; margin-left: 200px; border: none; background-color: red; padding: 10px; color: white; border-radius: 10px; cursor: pointer;" onclick="provokeload()">Upload
+                    image</button>
+
             </div>
+        </form>
+        <div class="loading" id="loading">
+            <img src="https://miro.medium.com/max/1400/1*CsJ05WEGfunYMLGfsT2sXA.gif" alt="">
         </div>
     </section>
 
@@ -468,6 +619,9 @@
 
         console.log(Cookies.get('csrftoken'));
 
+        function provokeload(){
+            document.getElementById('loading').style.display = 'flex';
+        }
     </script>
 </body>
 
