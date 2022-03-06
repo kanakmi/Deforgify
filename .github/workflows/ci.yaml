@@ -1,0 +1,108 @@
+name: deforgify
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+
+jobs:
+  health-check-job:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github-actions
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Cache dependency
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Setup python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Check Python version
+        run: python --version
+      - name: Install requirements
+        run: pip install -r requirements.txt
+      - name: Check Syntax
+        run: pycodestyle --statistics .
+      - name: Run Migrations
+        run: python manage.py migrate
+      - name: Run Test
+        run: python manage.py test
+
+  package-job:
+    runs-on: ubuntu-latest
+    needs: [health-check-job]
+    if: ${{ github.event_name == 'push' }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Build & Publish Image
+        uses: docker/build-push-action@v1
+        env:
+          app_name: app
+        with:
+          username: _json_key
+          password: ${{ secrets.GKE_PASSWORD }}
+          registry: gcr.io
+          repository: ${{secrets.GKE_PROJECT}}/github-django-actions/app
+          tag_with_sha: true
+
+  deploy-job:
+    runs-on: ubuntu-latest
+    needs: [package-job]
+    if: ${{ github.event_name == 'push' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '270.0.0'
+          service_account_email: ${{ secrets.GKE_EMAIL }}
+          service_account_key: ${{ secrets.GKE_PASSWORD }}
+      - name: Set Repo Location
+        id: repo
+        run: echo "::set-output name=repo_name::gcr.io/${{secrets.GKE_PROJECT}}/github-django-actions/app:sha-$(git rev-parse --short HEAD)"
+      - name: Check Repo Location
+        run: echo ${{ steps.repo.outputs.repo_name }}
+      - name: Install Helm
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
+      - name: Connect to kubernetes cluster
+        run: |
+          gcloud container clusters get-credentials ${{secrets.GKE_CLUSTER}} --zone ${{secrets.GKE_ZONE}} --project ${{secrets.GKE_PROJECT}}
+      - name: Helm Deploy
+        run: >
+          helm upgrade
+          --install
+          --set image=${{ steps.repo.outputs.repo_name }}
+          --set user=${{ secrets.DB_USER }}
+          --set password=${{ secrets.DB_PASSWORD }}
+          --set host=${{ secrets.DB_HOST }}
+          --set port=${{ secrets.DB_PORT }}
+          --set name=${{ secrets.DB_NAME }}
+          --wait
+          --atomic
+          app
+          ./k8s
+      - name: Check pods
+        run: kubectl get pods
