@@ -42,6 +42,9 @@ The "fake" faces collected in this dataset are generated using the StyleGAN2, wh
 - We used ReLU activation in all layers except output layer to reduce computation cost and introduce non-linearity.
 - Finally the Output Layer was constructed containing 3 neurons (1 for each class) and softmax activation.
 
+<img src="https://user-images.githubusercontent.com/54859521/156919341-7d25c3f3-122c-4560-9e3f-74021ffe76ba.png" align="right"  width="28%"/>
+<img src="https://user-images.githubusercontent.com/54859521/156919363-6159ab82-7220-45ea-b181-9b70f3568ef0.png" align="right"  width="28%"/>
+
 ### 🤩 Results
 - The model with least Validation Loss was saved during the training and reloaded before obtaining the final results.
 - The model was able to classify all of the samples correctly.
