@@ -42,7 +42,7 @@ The "fake" faces collected in this dataset are generated using the StyleGAN2, wh
 - We started with 512 neurons in the first Dense layer and reduced them to half over the next two Dense layers.
 - Some Dropout Layers were also introduced throught the model to randomly ignore some of the neurons and reduce over-fitting.
 - We used ReLU activation in all layers except output layer to reduce computation cost and introduce non-linearity.
-- Finally the Output Layer was constructed containing 3 neurons (1 for each class) and softmax activation.
+- Finally the Output Layer was constructed containing 2 neurons (1 for each class) and softmax activation.
 
 <img src="https://user-images.githubusercontent.com/54859521/156919341-7d25c3f3-122c-4560-9e3f-74021ffe76ba.png" align="right"  width="28%"/>
 <img src="https://user-images.githubusercontent.com/54859521/156919363-6159ab82-7220-45ea-b181-9b70f3568ef0.png" align="right"  width="28%"/>
