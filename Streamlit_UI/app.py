@@ -4,7 +4,8 @@ import classifyPage
 
 st.set_page_config(
     page_title="Deforgify",
-    layout="centered")
+    page_icon="🤖",
+    layout="wide")
 
 PAGES = {
     "Dashboard": dashboard,

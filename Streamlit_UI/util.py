@@ -15,6 +15,7 @@ def classify_image(file_path):
 
     image = Image.open(file_path) # reading the image
     image = image.resize((128, 128)) # resizing the image to fit the trained model
+    image = image.convert("RGB") # converting the image to RGB
     img = np.asarray(image) # converting it to numpy array
     img = np.expand_dims(img, 0)
     predictions = model.predict(img) # predicting the label
